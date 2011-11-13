@@ -1,0 +1,6 @@
+
+dequeue is a double ended linked queue that is fast to access from both ends
+
+you can push and pop, and shift and unshift as you please
+
+MIT licensed

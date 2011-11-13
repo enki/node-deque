@@ -1,0 +1,16 @@
+{
+  "author": "Paul Bohm <enki@bbq.io> (http://paulbohm.com/)",
+  "name": "dequeue",
+  "description": "Double Ended Queue Datastructure - ordered collection with optimized access from its endpoints",
+  "version": "0.0.1",
+  "homepage": "https://github.com/enki/node-deque/",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/enki/node-deque.git"
+  },
+  "engines": {
+    "node": ">=0.4.0"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
