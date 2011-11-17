@@ -81,7 +81,7 @@
   })();
 
   Dequeue.prototype.merge_prefix = function(size) {
-    var chunk, joined, prefix, remaining;
+    var buflen, chunk, joined, pos, prefix, remaining, x, _i, _j, _len, _len2;
     if (this.length < 1) return;
     if ((this.length === 1) && (this.head.next.data.length <= size)) return;
     prefix = [];
@@ -96,7 +96,18 @@
       remaining -= chunk.length;
     }
     if (prefix) {
-      joined = Buffer(prefix.join(Buffer(0)));
+      buflen = 0;
+      for (_i = 0, _len = prefix.length; _i < _len; _i++) {
+        x = prefix[_i];
+        buflen += x.length;
+      }
+      joined = Buffer(buflen);
+      pos = 0;
+      for (_j = 0, _len2 = prefix.length; _j < _len2; _j++) {
+        x = prefix[_j];
+        x.copy(joined, pos);
+        pos += x.length;
+      }
       this.unshift(joined);
     }
     if (this.length < 1) return this.unshift(Buffer(0));

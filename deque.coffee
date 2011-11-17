@@ -69,7 +69,12 @@ Dequeue::merge_prefix = (size) ->
         prefix.push(chunk)
         remaining -= chunk.length
     if prefix
-        joined = Buffer( prefix.join( Buffer(0) ) )
+        buflen = 0; (buflen += x.length for x in prefix);
+        joined = Buffer(buflen)
+        pos = 0
+        for x in prefix
+            x.copy(joined, pos)
+            pos += x.length
         @unshift(joined)
     if @length < 1
         @unshift( Buffer(0) )
