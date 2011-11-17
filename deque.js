@@ -1,5 +1,24 @@
 (function() {
-  var Dequeue, DequeueNode;
+  var Dequeue, DequeueNode, joinBuffer;
+
+  joinBuffer = function(buf) {
+    var buflen, joined, pos, x, _i, _j, _len, _len2;
+    buflen = 0;
+    for (_i = 0, _len = buf.length; _i < _len; _i++) {
+      x = buf[_i];
+      buflen += x.length;
+    }
+    joined = Buffer(buflen);
+    pos = 0;
+    for (_j = 0, _len2 = buf.length; _j < _len2; _j++) {
+      x = buf[_j];
+      x.copy(joined, pos);
+      pos += x.length;
+    }
+    return joined;
+  };
+
+  exports.joinBuffer = joinBuffer;
 
   DequeueNode = (function() {
 
@@ -81,7 +100,7 @@
   })();
 
   Dequeue.prototype.merge_prefix = function(size) {
-    var buflen, chunk, joined, pos, prefix, remaining, x, _i, _j, _len, _len2;
+    var chunk, joined, prefix, remaining;
     if (this.length < 1) return;
     if ((this.length === 1) && (this.head.next.data.length <= size)) return;
     prefix = [];
@@ -96,18 +115,7 @@
       remaining -= chunk.length;
     }
     if (prefix) {
-      buflen = 0;
-      for (_i = 0, _len = prefix.length; _i < _len; _i++) {
-        x = prefix[_i];
-        buflen += x.length;
-      }
-      joined = Buffer(buflen);
-      pos = 0;
-      for (_j = 0, _len2 = prefix.length; _j < _len2; _j++) {
-        x = prefix[_j];
-        x.copy(joined, pos);
-        pos += x.length;
-      }
+      joined = joinBuffer(prefix);
       this.unshift(joined);
     }
     if (this.length < 1) return this.unshift(Buffer(0));

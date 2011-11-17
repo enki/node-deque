@@ -1,4 +1,15 @@
 
+joinBuffer = (buf) ->
+    buflen = 0; (buflen += x.length for x in buf);
+    joined = Buffer(buflen)
+    pos = 0
+    for x in buf
+        x.copy(joined, pos)
+        pos += x.length
+    return joined
+
+exports.joinBuffer = joinBuffer
+
 class DequeueNode
     constructor: (@data) ->
         @prev = @next = null
@@ -69,12 +80,7 @@ Dequeue::merge_prefix = (size) ->
         prefix.push(chunk)
         remaining -= chunk.length
     if prefix
-        buflen = 0; (buflen += x.length for x in prefix);
-        joined = Buffer(buflen)
-        pos = 0
-        for x in prefix
-            x.copy(joined, pos)
-            pos += x.length
+        joined = joinBuffer(prefix)
         @unshift(joined)
     if @length < 1
         @unshift( Buffer(0) )
